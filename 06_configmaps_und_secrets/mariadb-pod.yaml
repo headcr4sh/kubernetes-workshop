@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app.kubernetes.io/name: wordpress-mariadb
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+    app.kubernetes.io/version: v10.3.32
+  name: mariadb
+spec:
+  containers:
+  - name: mariadb
+    image: mariadb:10.3.32
+
+    # So viele verschiedene Möglichkeiten, die ConfigMaps zu nutzen??
+    # ... ja... und es gibt noch mehr, wenn wir volumeMounts mit in Betracht ziehen!
+    env:
+    - name: FOO
+      value: bar
+    - name: BAZ
+      valueFrom:
+        configMapKeyRef:
+          key: MARIADB_DATABASE
+          name: mariadb
+    envFrom:
+    - configMapRef:
+        name: mariadb
+    - secretRef:
+        name: mariadb
