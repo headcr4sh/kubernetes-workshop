@@ -26,7 +26,7 @@ Der Ordner `/docker-entrypoint-initdb.d` im Container muss hierzu mindestens ein
 beinhalten. Diese Datei könnte z.B. so aussehen:
 
 ```sql
-CREATE TABLE foo (bar varchar, baz varchar);
+CREATE TABLE foo (bar varchar(16), baz varchar(16));
 ```
 
 *Hinweis:* Nutzt hierzu `spec.template.spec.volumets` und `spec.template.spec.containers[0].volumeMounts` in Verbindung

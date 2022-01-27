@@ -31,3 +31,10 @@ spec:
       containers:
       - name: mariadb
         image: mariadb:10.3.32
+        volumeMounts:
+          - mountPath: /docker-entrypoint-initdb.d
+            name: ddls
+      volumes:
+        - name: ddl
+          configMap:
+            name:

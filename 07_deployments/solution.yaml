@@ -3,37 +3,25 @@ kind: ConfigMap
 metadata:
   name: mariadb-config
 data:
-  MARIADB_DATABASE: wordpress
+  MARIADB_DATABASE: test
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: mariadb-secret
 stringData:
-  MARIADB_ROOT_PASSWORD: wordpress
+  MARIADB_ROOT_PASSWORD: test
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mariadb-initdb
-data: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mariadb
-spec:
-  ports:
-  - port: 3306
-    targetPort: mysql
-    name: mysql
-  selector:
-    app.kubernetes.io/name: wordpress-mariadb
-    app.kubernetes.io/component: database
-    app.kubernetes.io/part-of: wordpress
+data:
+  initdb.sql: |
+    CREATE TABLE foo (bar VARCHAR(12), baz VARCHAR(12));
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: wordpress-mariadb
@@ -42,7 +30,6 @@ metadata:
   name: mariadb
 spec:
   replicas: 1
-  serviceName: mariadb
   selector:
     matchLabels:
       app.kubernetes.io/name: wordpress-mariadb
@@ -67,11 +54,6 @@ spec:
         volumeMounts:
         - name: mariadb-initdb
           mountPath: /docker-entrypoint-initdb.d
-        - name: tmp
-          mountPath: /tmp
-        ports:
-        - containerPort: 3306
-          name: mysql
       volumes:
       - name: mariadb-initdb
         configMap:

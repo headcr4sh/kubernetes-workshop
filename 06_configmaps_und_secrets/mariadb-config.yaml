@@ -1,6 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mariadb
+  name: mariadb-2
 data:
+  foo: bar
+  x: "yz"
+  my-value: "true"
   MARIADB_DATABASE: wordpress
+  config.yaml: |
+    foo: bar
+    bar: baz
